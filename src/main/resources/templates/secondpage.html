@@ -26,8 +26,9 @@
     </form>
     <form th:action="@{/search}" method="post" class="mb-3">
         <div class="input-group">
-            <input type="text" class="form-control" name="searchTerm" placeholder="Найти">
-            <button class="btn btn-outline-secondary" type="submit">Найти</button>
+            <input type="text" name="searching" class="form-control" placeholder="Поиск">
+            <button class="btn btn-outline secondary" type="submit">Найти</button>
+
         </div>
 
     </form>
@@ -39,6 +40,7 @@
                 <button type="submit" class = "btn btn-danger btn-sm">Удалить</button>
             </form>
         </li>
+        <a href="index.html" class="button">Назад на первую страницу</a>
     </ul>
 </div>
 </body>

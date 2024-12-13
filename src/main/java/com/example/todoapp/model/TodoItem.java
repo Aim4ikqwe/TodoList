@@ -6,12 +6,10 @@ import jakarta.persistence.Id;
 
 @Entity
 public class TodoItem {
-
     @Id
     @GeneratedValue
     private Long id;
     private String title;
-
 
     public TodoItem() {
     }
