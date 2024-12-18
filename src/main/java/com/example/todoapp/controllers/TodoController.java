@@ -21,30 +21,30 @@ public class TodoController implements CommandLineRunner {
         this.todoItemRepository = todoItemRepository;
     }
 
-    @GetMapping
-    public String index(Model model){
+    @GetMapping("/secondpage")
+    public String secondpage(Model model){
 
         List<TodoItem> allTodos = todoItemRepository.findAll();
         model.addAttribute("allTodos", allTodos);
         model.addAttribute("newTodo", new TodoItem());
-        return "index";
+        return "secondpage";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute TodoItem todoItem) {
         todoItemRepository.save(todoItem);
 
-        return "redirect:/";
+        return "redirect:/secondpage";
     }
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id){
         todoItemRepository.deleteById(id);
-        return "redirect:/";
+        return "redirect:/secondpage";
     }
     @PostMapping("/deleteAll")
     public String deleteAll(){
         todoItemRepository.deleteAll();
-        return "redirect:/";
+        return "redirect:/secondpage";
     }
     @PostMapping("/search")
     public String searching(@RequestParam("searchTerm") String searchTerm, Model model) {
@@ -53,7 +53,7 @@ public class TodoController implements CommandLineRunner {
 
         model.addAttribute("allTodos", searchResults);
         model.addAttribute("newTodo", new TodoItem());
-        return "index";
+        return "secondpage";
     }
     @Override
     public void run(String... args) throws Exception {
