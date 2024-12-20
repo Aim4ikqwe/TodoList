@@ -3,6 +3,7 @@ package com.example.todoapp.controllers;
 import com.example.todoapp.model.Identification;
 import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.repositories.IdentificationRepository;
+import jakarta.persistence.Id;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,12 +16,8 @@ import java.util.List;
 
 @Controller
 public class AuthorizationController implements CommandLineRunner {
+    IdentificationRepository identificationRepository;
 
-    private final IdentificationRepository identificationRepository;
-
-    public AuthorizationController(IdentificationRepository identificationRepository) {
-        this.identificationRepository = identificationRepository;
-    }
 
     @GetMapping
     public String index(Model model){
@@ -28,9 +25,9 @@ public class AuthorizationController implements CommandLineRunner {
 
     }
     @PostMapping("/registration")
-    public String registration(@ModelAttribute Identification identification){
-        identificationRepository.save(identification);
-        return "redirect:/secondpage";
+    public String registration(@RequestParam("Login") String Login, @RequestParam("Password") String Password){
+
+        return "index";
     }
     @PostMapping("/authorization")
     public String authorization(@RequestParam("Login") String Login,@RequestParam("Password") String Password){

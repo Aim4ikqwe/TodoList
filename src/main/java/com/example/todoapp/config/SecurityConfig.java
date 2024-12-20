@@ -1,5 +1,6 @@
 package com.example.todoapp.config;
 
+import com.example.todoapp.services.IdentificationDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -23,15 +24,16 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(PasswordEncoder encoder){
     UserDetails user = User.builder().username("user").password(encoder.encode("user")).build();
 
-    return new InMemoryUserDetailsManager(user);
+    return new IdentificationDetailService();
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth.requestMatchers("/register/**").permitAll()
+                    .requestMatchers("/registration/**").permitAll()
                     .requestMatchers("/").permitAll()
                     .requestMatchers("/style.css/**").permitAll()
-                    .requestMatchers("/**").authenticated())
+                    .requestMatchers("/**").permitAll())
             .formLogin(AbstractAuthenticationFilterConfigurer::permitAll) // TODO 16:30 Доделать авторизацию и регистрацию
             .build();
 
