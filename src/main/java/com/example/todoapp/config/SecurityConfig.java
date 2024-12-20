@@ -3,6 +3,8 @@ package com.example.todoapp.config;
 import com.example.todoapp.services.IdentificationDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,8 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder){
-    UserDetails user = User.builder().username("user").password(encoder.encode("user")).build();
+    public UserDetailsService userDetailsService(){
 
     return new IdentificationDetailService();
     }
@@ -33,10 +34,18 @@ public class SecurityConfig {
                     .requestMatchers("/registration/**").permitAll()
                     .requestMatchers("/").permitAll()
                     .requestMatchers("/style.css/**").permitAll()
-                    .requestMatchers("/**").permitAll())
+                    .requestMatchers("/**").authenticated())
             .formLogin(AbstractAuthenticationFilterConfigurer::permitAll) // TODO 16:30 Доделать авторизацию и регистрацию
             .build();
 
+    }
+
+    @Bean
+    AuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService());
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
     }
     @Bean
     public PasswordEncoder passwordEncoder(){
