@@ -23,29 +23,23 @@ public class AuthorizationController implements CommandLineRunner {
         this.passwordEncoder = passwordEncoder;
     }
 
-
-    @GetMapping
-    public String index(Model model){
-        model.addAttribute("identification", new Identification());
-        return "index";
-
-    }
-
     @PostMapping("/registration")
-    public String registration(@RequestParam("Login") String Login, @RequestParam("Password") String Password){
+    public String registration(@RequestParam("Login") String Login, @RequestParam("Password") String Password, Model model) {
+        // Проверяем, существует ли пользователь с данным логином
+        if (identificationRepository.findByLogin(Login).isPresent()) {
+            // Добавляем сообщение об ошибке в модель
+            model.addAttribute("error", "Пользователь с таким логином уже существует");
+            return "register"; // Возвращаем страницу регистрации
+        }
+
+        // Создаем нового пользователя
         Identification newUser = new Identification();
         newUser.setLogin(Login);
         newUser.setPassword(passwordEncoder.encode(Password));
         newUser.setRoles("ROLE_USER");
         identificationRepository.save(newUser);
 
-        return "index";
-    }
-    @PostMapping("/authorization")
-    public String authorization(@RequestParam("Login") String Login,@RequestParam("Password") String Password){
-
-
-        return "index";
+        return "redirect:/"; // Перенаправляем на главную страницу
     }
     @GetMapping("/register")
     public String register(Model model){

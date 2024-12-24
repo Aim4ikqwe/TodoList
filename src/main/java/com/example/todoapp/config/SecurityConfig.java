@@ -26,20 +26,33 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(){
 
     return new IdentificationDetailService();
+
+    //TODO Добавить обработчик ошибки 404 | Можно еще добавить авторизацию через email и Google
+
+    // TODO Добавить пагинацию
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth.requestMatchers("/register/**").permitAll()
                     .requestMatchers("/registration/**").permitAll()
-                    .requestMatchers("/").permitAll()
                     .requestMatchers("/style.css/**").permitAll()
                     .requestMatchers("/**").authenticated())
-            .formLogin(AbstractAuthenticationFilterConfigurer::permitAll) // TODO 16:30 Доделать авторизацию и регистрацию
+            .formLogin(login -> login
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/secondpage", true)
+                    .failureUrl("/login")
+                    .permitAll()
+
+
+            )
+            .logout(logout -> logout
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/login?logout")
+                    .permitAll())
             .build();
 
     }
-
     @Bean
     AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
