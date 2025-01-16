@@ -1,8 +1,8 @@
 package com.example.todoapp.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 public class TodoItem {
@@ -11,11 +11,18 @@ public class TodoItem {
     private Long id;
     private String title;
 
+    @ManyToOne
+    @JoinColumn( name = "identification_id")
+    private Identification identification;
     public TodoItem() {
     }
 
-    public TodoItem(String title) {
-        this.title = title;
+    public Identification getIdentification() {
+        return identification;
+    }
+
+    public void setIdentification(Identification identification) {
+        this.identification = identification;
     }
 
     public Long getId() {
