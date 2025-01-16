@@ -17,8 +17,10 @@ public class IdentificationDetailService implements UserDetailsService {
     private IdentificationRepository repository;
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        Optional<Identification> user =repository.findByLogin(login);
-        return user.map(MyUserDetails::new)
-                .orElseThrow(()-> new UsernameNotFoundException(login + " not found"));
+        Identification user = repository.findByLogin(login);
+        if (user == null) {
+            throw new UsernameNotFoundException(login + " not found");
+        }
+        return new MyUserDetails(user);
     }
 }

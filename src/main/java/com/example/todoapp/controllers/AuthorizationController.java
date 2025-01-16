@@ -5,6 +5,7 @@ import com.example.todoapp.model.TodoItem;
 import com.example.todoapp.repositories.IdentificationRepository;
 import com.example.todoapp.services.IdentificationDetailService;
 import jakarta.persistence.Id;
+import lombok.extern.java.Log;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,8 @@ public class AuthorizationController implements CommandLineRunner {
     @PostMapping("/registration")
     public String registration(@RequestParam("Login") String Login, @RequestParam("Password") String Password, Model model) {
         // Проверяем, существует ли пользователь с данным логином
-        if (identificationRepository.findByLogin(Login).isPresent()) {
+        Identification existingUser = identificationRepository.findByLogin(Login);
+        if (existingUser != null) {
             // Добавляем сообщение об ошибке в модель
             model.addAttribute("error", "Пользователь с таким логином уже существует");
             return "register"; // Возвращаем страницу регистрации

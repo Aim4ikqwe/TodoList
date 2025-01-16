@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface IdentificationRepository extends JpaRepository<Identification, Long> {
-        Optional<Identification> findByLogin(String Login);
+        Identification findByLogin(String Login);
         }

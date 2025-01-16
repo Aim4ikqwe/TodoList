@@ -32,8 +32,8 @@ public class TodoController implements CommandLineRunner {
 
     @GetMapping("/secondpage")
     public String secondpage(Model model, @AuthenticationPrincipal UserDetails currentUser){ // Для получения пользователя
-        Optional<Identification> identification = identificationRepository.findByLogin(currentUser.getUsername());
-        List<TodoItem> allTodos = todoItemRepository.findAll();
+        Identification identification = identificationRepository.findByLogin(currentUser.getUsername());
+        List<TodoItem> allTodos = todoItemRepository.findByIdentificationId(identification.getId());
         model.addAttribute("allTodos", allTodos);
         model.addAttribute("newTodo", new TodoItem());
         return "secondpage";
@@ -41,7 +41,8 @@ public class TodoController implements CommandLineRunner {
 
     @PostMapping("/add")
     public String add(@ModelAttribute TodoItem todoItem, @AuthenticationPrincipal UserDetails currentUser) {
-        // Identification user = identificationRepository.findByLogin(currentUser.getUsername());
+         Identification user = identificationRepository.findByLogin(currentUser.getUsername());
+         todoItem.setIdentification(user);
         todoItemRepository.save(todoItem);
 
         return "redirect:/secondpage";
@@ -52,8 +53,9 @@ public class TodoController implements CommandLineRunner {
         return "redirect:/secondpage";
     }
     @PostMapping("/deleteAll")
-    public String deleteAll(){
-        todoItemRepository.deleteAll();
+    public String deleteAll(@AuthenticationPrincipal UserDetails user){
+        Identification identification = identificationRepository.findByLogin(user.getUsername());
+        todoItemRepository.deleteAll(); //TODO Доделать, чтобы удалял только свои задачи, а не все!
         return "redirect:/secondpage";
     }
     @PostMapping("/search")
