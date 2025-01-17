@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,9 +54,10 @@ public class TodoController implements CommandLineRunner {
         return "redirect:/secondpage";
     }
     @PostMapping("/deleteAll")
+    @Transactional
     public String deleteAll(@AuthenticationPrincipal UserDetails currentUser){
         Identification user = identificationRepository.findByLogin(currentUser.getUsername());
-        todoItemRepository.deleteByIdentificationId(user.getId()); //TODO Доделать, чтобы удалял только свои задачи, а не все!
+        todoItemRepository.deleteByIdentificationId(user.getId());
         return "redirect:/secondpage";
     }
     @PostMapping("/search")
