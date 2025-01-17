@@ -53,9 +53,9 @@ public class TodoController implements CommandLineRunner {
         return "redirect:/secondpage";
     }
     @PostMapping("/deleteAll")
-    public String deleteAll(@AuthenticationPrincipal UserDetails user){
-        Identification identification = identificationRepository.findByLogin(user.getUsername());
-        todoItemRepository.deleteAll(); //TODO Доделать, чтобы удалял только свои задачи, а не все!
+    public String deleteAll(@AuthenticationPrincipal UserDetails currentUser){
+        Identification user = identificationRepository.findByLogin(currentUser.getUsername());
+        todoItemRepository.deleteByIdentificationId(user.getId()); //TODO Доделать, чтобы удалял только свои задачи, а не все!
         return "redirect:/secondpage";
     }
     @PostMapping("/search")

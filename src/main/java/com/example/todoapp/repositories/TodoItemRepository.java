@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface TodoItemRepository extends JpaRepository<TodoItem, Long> {
     List<TodoItem> findByIdentificationId(Long IdentificationId);
-    void removeByIdentificationId(Long IdentificationId);
+    List<TodoItem> deleteByIdentificationId(Long IdentificationId);
 }
